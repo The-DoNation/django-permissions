@@ -172,7 +172,7 @@ class PrincipalRoleRelation(models.Model):
 
     def __unicode__(self):
         if self.user:
-            principal = self.user.username
+            principal = self.user.get_username()
         else:
             principal = self.group
 
