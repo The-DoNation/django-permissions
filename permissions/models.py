@@ -1,5 +1,6 @@
 # django imports
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -159,7 +160,7 @@ class PrincipalRoleRelation(models.Model):
     content
         The content object which gets the local role (optional).
     """
-    user = models.ForeignKey(User, verbose_name=_(u"User"), blank=True, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_(u"User"), blank=True, null=True)
     group = models.ForeignKey(Group, verbose_name=_(u"Group"), blank=True, null=True)
     role = models.ForeignKey(Role, verbose_name=_(u"Role"))
     content_type = models.ForeignKey(ContentType, verbose_name=_(u"Content type"), blank=True, null=True)
