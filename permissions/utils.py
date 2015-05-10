@@ -19,8 +19,6 @@ from permissions.models import Permission
 from permissions.models import PrincipalRoleRelation
 from permissions.models import Role
 
-User = get_user_model()
-
 # Roles ######################################################################
 
 def add_role(principal, role):
@@ -34,6 +32,8 @@ def add_role(principal, role):
     role
         The role which is assigned.
     """
+    User = get_user_model()
+
     if isinstance(principal, User):
         try:
             PrincipalRoleRelation.objects.get(user=principal, role=role, content_id=None, content_type=None)
@@ -63,7 +63,9 @@ def add_local_role(obj, principal, role):
     role
         The role which is assigned.
     """
+    User = get_user_model()
     ctype = ContentType.objects.get_for_model(obj)
+    
     if isinstance(principal, User):
         try:
             PrincipalRoleRelation.objects.get(user=principal, role=role, content_id=obj.id, content_type=ctype)
@@ -90,6 +92,8 @@ def remove_role(principal, role):
     role
         The role which is removed.
     """
+    User = get_user_model()
+    
     try:
         if isinstance(principal, User):
             ppr = PrincipalRoleRelation.objects.get(
@@ -119,6 +123,8 @@ def remove_local_role(obj, principal, role):
     role
         The role which is removed.
     """
+    User = get_user_model()
+
     try:
         ctype = ContentType.objects.get_for_model(obj)
 
@@ -144,6 +150,8 @@ def remove_roles(principal):
     principal
         The principal (user or group) from which all roles are removed.
     """
+    User = get_user_model()
+
     if isinstance(principal, User):
         ppr = PrincipalRoleRelation.objects.filter(
             user=principal, content_id=None, content_type=None)
@@ -169,6 +177,7 @@ def remove_local_roles(obj, principal):
     principal
         The principal (user or group) from which the roles are removed.
     """
+    User = get_user_model()
     ctype = ContentType.objects.get_for_model(obj)
 
     if isinstance(principal, User):
@@ -260,6 +269,8 @@ def get_roles(user, obj=None):
 def get_global_roles(principal):
     """Returns *direct* global roles of passed principal (user or group).
     """
+    User = get_user_model()
+
     if isinstance(principal, User):
         return [prr.role for prr in PrincipalRoleRelation.objects.filter(
             user=principal, content_id=None, content_type=None)]
@@ -274,6 +285,7 @@ def get_local_roles(obj, principal):
     """Returns *direct* local roles for passed principal and content object.
     """
     ctype = ContentType.objects.get_for_model(obj)
+    User = get_user_model()
 
     if isinstance(principal, User):
         return [prr.role for prr in PrincipalRoleRelation.objects.filter(
@@ -535,6 +547,8 @@ def get_user(id_or_username):
     id_or_username
         The id or the username of the user which should be returned.
     """
+    User = get_user_model()
+
     try:
         return User.objects.get(pk=id_or_username)
     except (User.DoesNotExist, ValueError):
