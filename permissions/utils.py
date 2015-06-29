@@ -222,12 +222,11 @@ def get_roles(user, obj=None):
     except (AttributeError, KeyError):
         pass
 
-    groups = user.groups.all()
-    groups_ids_str = ", ".join([str(g.id) for g in groups])
+    user_groups = user.groups.all()
 
-    if groups_ids_str:
+    if user_groups:
         prrs = PrincipalRoleRelation.objects.filter(
-            Q(user_id=user.id) | Q(group_id__in=groups_ids_str), content_id=None
+            Q(user_id=user.id) | Q(group_id__in=user_groups), content_id=None
         ).values("role_id")
     else:
         prrs = PrincipalRoleRelation.objects.filter(user_id=user.id, content_id=None).values("role_id")
@@ -239,9 +238,9 @@ def get_roles(user, obj=None):
     while obj:
         ctype = ContentType.objects.get_for_model(obj)
 
-        if groups_ids_str:
+        if user_groups:
             prrs = PrincipalRoleRelation.objects.filter(
-                Q(user_id=user.id) | Q(group_id__in=groups_ids_str), content_id=obj.id, content_type_id=ctype.id
+                Q(user_id=user.id) | Q(group_id__in=user_groups), content_id=obj.id, content_type_id=ctype.id
             ).values("role_id")
         else:
             prrs = PrincipalRoleRelation.objects.filter(
