@@ -1,23 +1,16 @@
-# python imports
 import warnings
 
-# django imports
-from django.db import IntegrityError
-from django.db import connection
-from django.db.models import Q
 from django.contrib.auth import get_user_model
-#from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import connection, IntegrityError
+from django.db.models import Q
 
-# permissions imports
-from permissions.exceptions import Unauthorized
-from permissions.models import ObjectPermission
-from permissions.models import ObjectPermissionInheritanceBlock
-from permissions.models import Permission
-from permissions.models import PrincipalRoleRelation
-from permissions.models import Role
+from .exceptions import Unauthorized
+from .models import (
+    ObjectPermission, ObjectPermissionInheritanceBlock, Permission,
+    PrincipalRoleRelation, Role)
 
 # Roles ######################################################################
 

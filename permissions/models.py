@@ -1,14 +1,10 @@
-# django imports
-from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
-# permissions imports
-import permissions.utils
 
 
 class Permission(models.Model):
@@ -107,9 +103,10 @@ class Role(models.Model):
         return self.name
 
     def add_principal(self, principal, content=None):
-        """Addes the given principal (user or group) ot the Role.
+        """Adds the given principal (user or group) ot the Role.
         """
-        return permissions.utils.add_role(principal, self)
+        from .utils import add_role
+        return add_role(principal, self)
 
     def get_groups(self, content=None):
         """Returns all groups which has this role assigned. If content is given
